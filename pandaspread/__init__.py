@@ -8,7 +8,10 @@ def required_scopes() -> list:
 
 def write_to_spreadsheet(service: Resource, spreadsheet_id: str, spreadsheet_range: str, df: pd.DataFrame, **kwargs) -> dict:
     value_input_option = kwargs.get('value_input_option', 'USER_ENTERED')
-    values = [df.columns.values.tolist()] + df.fillna('').values.tolist()
+    values = df.fillna('').values.tolist()
+    if kwargs.get('header', True):
+        values.insert(0, df.columns.values.tolist())
+
     body = {
         'valueInputOption': value_input_option,
         'data': [
